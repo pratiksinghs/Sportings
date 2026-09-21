@@ -1,3 +1,4 @@
+
 /*
 =========================================================
  SPORTING - BACKEND SERVER
@@ -76,25 +77,12 @@ const corsOptions = {
     origin:
         (origin, callback) => {
 
-            /*
-            -------------------------------------------------
-            Allow requests without Origin.
-            Useful for Postman/server-side requests.
-            -------------------------------------------------
-            */
-
             if (!origin) {
                 return callback(
                     null,
                     true
                 );
             }
-
-            /*
-            -------------------------------------------------
-            Development mode
-            -------------------------------------------------
-            */
 
             if (
                 NODE_ENV ===
@@ -106,12 +94,6 @@ const corsOptions = {
                 );
             }
 
-            /*
-            -------------------------------------------------
-            Production allowed origins
-            -------------------------------------------------
-            */
-
             if (
                 allowedOrigins.includes(
                     origin
@@ -122,12 +104,6 @@ const corsOptions = {
                     true
                 );
             }
-
-            /*
-            -------------------------------------------------
-            Allow configured frontend URL
-            -------------------------------------------------
-            */
 
             const frontendURL =
                 process.env.FRONTEND_URL;
@@ -142,12 +118,6 @@ const corsOptions = {
                     true
                 );
             }
-
-            /*
-            -------------------------------------------------
-            Reject unknown origin
-            -------------------------------------------------
-            */
 
             return callback(
                 new Error(
@@ -241,6 +211,7 @@ app.use(
 /*
 =========================================================
  ROOT ROUTE
+ GET /
 =========================================================
 */
 
@@ -248,26 +219,426 @@ app.get(
     "/",
     (req, res) => {
 
-        res.status(200).json({
+        const statusPage = `<!DOCTYPE html>
+<html lang="en">
 
-            success:
-                true,
+<head>
 
-            message:
-                "SPORTING API is running successfully.",
+    <meta charset="UTF-8">
 
-            company:
-                "SPORTING",
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-            tagline:
-                "Run. Play. Achieve.",
+    <meta
+        name="description"
+        content="SPORTING API production status and server information."
+    >
 
-            environment:
-                NODE_ENV,
+    <title>
+        SPORTING API | Run. Play. Achieve.
+    </title>
 
-            timestamp:
-                new Date().toISOString()
-        });
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 24px;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                #07110d;
+
+            color:
+                #f4fff8;
+        }
+
+        .card {
+
+            width:
+                min(680px, 100%);
+
+            padding:
+                42px;
+
+            border:
+                1px solid #294d3b;
+
+            border-radius:
+                24px;
+
+            background:
+                #0d1b14;
+
+            box-shadow:
+                0 24px 70px
+                rgba(0, 0, 0, 0.45);
+        }
+
+        .badge {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            padding:
+                8px 14px;
+
+            border-radius:
+                999px;
+
+            background:
+                #b7ff3c;
+
+            color:
+                #07110d;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                0.08em;
+
+            text-transform:
+                uppercase;
+        }
+
+        .dot {
+
+            width:
+                9px;
+
+            height:
+                9px;
+
+            border-radius:
+                50%;
+
+            background:
+                #07110d;
+        }
+
+        h1 {
+
+            margin-top:
+                24px;
+
+            font-size:
+                clamp(42px, 8vw, 72px);
+
+            line-height:
+                0.95;
+
+            letter-spacing:
+                -0.04em;
+        }
+
+        .tagline {
+
+            margin-top:
+                14px;
+
+            color:
+                #b7ff3c;
+
+            font-size:
+                20px;
+
+            font-weight:
+                700;
+        }
+
+        .message {
+
+            margin-top:
+                18px;
+
+            color:
+                #b8c9bf;
+
+            line-height:
+                1.7;
+        }
+
+        .grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap:
+                14px;
+
+            margin-top:
+                30px;
+        }
+
+        .item {
+
+            padding:
+                18px;
+
+            border-radius:
+                16px;
+
+            background:
+                #12241b;
+
+            border:
+                1px solid #203d2e;
+        }
+
+        .label {
+
+            display:
+                block;
+
+            margin-bottom:
+                7px;
+
+            color:
+                #829b8c;
+
+            font-size:
+                12px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.08em;
+        }
+
+        .value {
+
+            font-weight:
+                700;
+
+            word-break:
+                break-word;
+        }
+
+        .links {
+
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                12px;
+
+            margin-top:
+                28px;
+        }
+
+        a {
+
+            display:
+                inline-block;
+
+            padding:
+                12px 18px;
+
+            border-radius:
+                12px;
+
+            text-decoration:
+                none;
+
+            font-weight:
+                700;
+
+            background:
+                #b7ff3c;
+
+            color:
+                #07110d;
+        }
+
+        a.secondary {
+
+            background:
+                transparent;
+
+            color:
+                #b7ff3c;
+
+            border:
+                1px solid #42674f;
+        }
+
+        footer {
+
+            margin-top:
+                30px;
+
+            color:
+                #667d70;
+
+            font-size:
+                12px;
+        }
+
+        @media (max-width: 560px) {
+
+            .card {
+
+                padding:
+                    28px;
+            }
+
+            .grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <main class="card">
+
+        <div class="badge">
+
+            <span class="dot"></span>
+
+            API Online
+
+        </div>
+
+        <h1>
+            SPORTING
+        </h1>
+
+        <p class="tagline">
+            Run. Play. Achieve.
+        </p>
+
+        <p class="message">
+
+            Welcome to the SPORTING API.
+            The production server is online
+            and ready to power the SPORTING
+            sports event management platform.
+
+        </p>
+
+        <section class="grid">
+
+            <div class="item">
+
+                <span class="label">
+                    Status
+                </span>
+
+                <span class="value">
+                    Online
+                </span>
+
+            </div>
+
+            <div class="item">
+
+                <span class="label">
+                    Environment
+                </span>
+
+                <span class="value">
+                    ${NODE_ENV}
+                </span>
+
+            </div>
+
+            <div class="item">
+
+                <span class="label">
+                    API
+                </span>
+
+                <span class="value">
+                    /api
+                </span>
+
+            </div>
+
+            <div class="item">
+
+                <span class="label">
+                    Server Time
+                </span>
+
+                <span class="value">
+                    ${new Date().toISOString()}
+                </span>
+
+            </div>
+
+        </section>
+
+        <div class="links">
+
+            <a href="/api/health">
+                Health Check
+            </a>
+
+            <a
+                class="secondary"
+                href="/api/test"
+            >
+                API Test
+            </a>
+
+        </div>
+
+        <footer>
+            SPORTING Backend • Production API
+        </footer>
+
+    </main>
+
+</body>
+
+</html>`;
+
+        res
+            .status(200)
+            .type("html")
+            .send(statusPage);
     }
 );
 
@@ -326,6 +697,7 @@ app.get(
             dbState ===
             1
         ) {
+
             databaseStatus =
                 "connected";
         }
@@ -334,6 +706,7 @@ app.get(
             dbState ===
             2
         ) {
+
             databaseStatus =
                 "connecting";
         }
@@ -342,6 +715,7 @@ app.get(
             dbState ===
             3
         ) {
+
             databaseStatus =
                 "disconnecting";
         }
@@ -375,60 +749,25 @@ app.get(
 =========================================================
 */
 
-/*
----------------------------------------------------------
- AUTH
- /api/auth
----------------------------------------------------------
-*/
-
 app.use(
     "/api/auth",
     authRoutes
 );
-
-/*
----------------------------------------------------------
- APPLICATIONS
- /api/applications
----------------------------------------------------------
-*/
 
 app.use(
     "/api/applications",
     applicationRoutes
 );
 
-/*
----------------------------------------------------------
- EVENTS
- /api/events
----------------------------------------------------------
-*/
-
 app.use(
     "/api/events",
     eventRoutes
 );
 
-/*
----------------------------------------------------------
- PARTICIPANTS
- /api/participants
----------------------------------------------------------
-*/
-
 app.use(
     "/api/participants",
     participantRoutes
 );
-
-/*
----------------------------------------------------------
- CONTACTS
- /api/contacts
----------------------------------------------------------
-*/
 
 app.use(
     "/api/contacts",
@@ -480,18 +819,13 @@ app.use(
             error
         );
 
-        /*
-        -------------------------------------------------
-        CORS error
-        -------------------------------------------------
-        */
-
         if (
             error.message &&
             error.message.includes(
                 "CORS policy"
             )
         ) {
+
             return res.status(403).json({
 
                 success:
@@ -502,12 +836,6 @@ app.use(
             });
         }
 
-        /*
-        -------------------------------------------------
-        JSON parsing error
-        -------------------------------------------------
-        */
-
         if (
             error instanceof
             SyntaxError &&
@@ -515,6 +843,7 @@ app.use(
                 400 &&
             "body" in error
         ) {
+
             return res.status(400).json({
 
                 success:
@@ -525,16 +854,11 @@ app.use(
             });
         }
 
-        /*
-        -------------------------------------------------
-        Payload too large
-        -------------------------------------------------
-        */
-
         if (
             error.type ===
             "entity.too.large"
         ) {
+
             return res.status(413).json({
 
                 success:
@@ -544,12 +868,6 @@ app.use(
                     "Request payload is too large."
             });
         }
-
-        /*
-        -------------------------------------------------
-        Default error
-        -------------------------------------------------
-        */
 
         return res.status(500).json({
 
@@ -576,12 +894,6 @@ const startServer =
 
         try {
 
-            /*
-            -------------------------------------------------
-            Validate important environment variables
-            -------------------------------------------------
-            */
-
             const requiredEnvironment =
                 [
                     "MONGO_URI",
@@ -607,6 +919,7 @@ const startServer =
 
                 missingEnvironment.forEach(
                     (key) => {
+
                         console.error(
                             `- ${key}`
                         );
@@ -620,19 +933,7 @@ const startServer =
                 process.exit(1);
             }
 
-            /*
-            -------------------------------------------------
-            Connect MongoDB
-            -------------------------------------------------
-            */
-
             await connectDB();
-
-            /*
-            -------------------------------------------------
-            Start HTTP server
-            -------------------------------------------------
-            */
 
             const server =
                 app.listen(
@@ -681,12 +982,6 @@ const startServer =
                     }
                 );
 
-            /*
-            -------------------------------------------------
-            Verify email service
-            -------------------------------------------------
-            */
-
             verifyEmailConnection()
                 .then(
                     (result) => {
@@ -694,10 +989,13 @@ const startServer =
                         if (
                             result.success
                         ) {
+
                             console.log(
                                 "Email service: Ready"
                             );
+
                         } else {
+
                             console.log(
                                 "Email service: Not configured"
                             );
@@ -713,12 +1011,6 @@ const startServer =
                         );
                     }
                 );
-
-            /*
-            -------------------------------------------------
-            Graceful shutdown - SIGINT
-            -------------------------------------------------
-            */
 
             process.on(
                 "SIGINT",
@@ -765,12 +1057,6 @@ const startServer =
                     );
                 }
             );
-
-            /*
-            -------------------------------------------------
-            Graceful shutdown - SIGTERM
-            -------------------------------------------------
-            */
 
             process.on(
                 "SIGTERM",

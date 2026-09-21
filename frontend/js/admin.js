@@ -1,23 +1,8 @@
+
 /*
 =========================================================
  SPORTING - ADMIN DASHBOARD JAVASCRIPT
  File: frontend/js/admin.js
-
- FIXED VERSION
- - JWT authentication
- - Dashboard statistics
- - Applications
- - Participants
- - Events
- - Contacts
- - Search
- - Filters
- - View details
- - Delete records
- - Logout
- - Loading state FIXED
- - Dashboard selector compatibility FIXED
- - API response compatibility FIXED
 =========================================================
 */
 
@@ -30,7 +15,7 @@
 
     const API_BASE_URL =
         window.SPORTING_API_BASE_URL ||
-        "http://localhost:5000";
+        "https://sportings-gi6l.onrender.com";
 
     const API = {
         auth: `${API_BASE_URL}/api/auth`,
@@ -52,10 +37,6 @@
     let participants = [];
     let events = [];
     let contacts = [];
-
-    /* =====================================================
-       INITIALIZATION
-    ===================================================== */
 
     document.addEventListener("DOMContentLoaded", function () {
         initializeAdmin();
@@ -87,10 +68,6 @@
         loadDashboard();
     }
 
-    /* =====================================================
-       AUTHENTICATION
-    ===================================================== */
-
     function getToken() {
         try {
             return localStorage.getItem(STORAGE_KEYS.token);
@@ -101,10 +78,7 @@
     }
 
     function saveToken(token) {
-        localStorage.setItem(
-            STORAGE_KEYS.token,
-            token
-        );
+        localStorage.setItem(STORAGE_KEYS.token, token);
     }
 
     function removeToken() {
@@ -135,10 +109,6 @@
             console.error("Unable to save admin:", error);
         }
     }
-
-    /* =====================================================
-       LOGIN
-    ===================================================== */
 
     function setupLoginForm() {
 
@@ -321,10 +291,6 @@
         }
     }
 
-    /* =====================================================
-       PASSWORD TOGGLE
-    ===================================================== */
-
     function setupPasswordToggle(form) {
 
         const password =
@@ -357,25 +323,13 @@
         });
     }
 
-    /* =====================================================
-       REDIRECTS
-    ===================================================== */
-
     function redirectToLogin() {
-
-        window.location.href =
-            "admin-login.html";
+        window.location.href = "admin-login.html";
     }
 
     function redirectToDashboard() {
-
-        window.location.href =
-            "admin-dashboard.html";
+        window.location.href = "admin-dashboard.html";
     }
-
-    /* =====================================================
-       ADMIN INFORMATION
-    ===================================================== */
 
     function loadAdminInformation() {
 
@@ -419,10 +373,6 @@
                 element.textContent = initial;
             });
     }
-
-    /* =====================================================
-       LOAD DASHBOARD
-    ===================================================== */
 
     async function loadDashboard() {
 
@@ -476,12 +426,6 @@
                     ? results[3].value
                     : [];
 
-            /*
-             * IMPORTANT:
-             * Loading is hidden even if one API
-             * request fails.
-             */
-
             setLoading(false);
 
             updateDashboardStats();
@@ -508,10 +452,6 @@
             );
         }
     }
-
-    /* =====================================================
-       FETCH RECORDS
-    ===================================================== */
 
     async function fetchRecords(
         endpoint,
@@ -551,10 +491,6 @@
         );
     }
 
-    /* =====================================================
-       EXTRACT API DATA
-    ===================================================== */
-
     function extractRecords(
         result,
         type
@@ -567,16 +503,6 @@
         if (!result || typeof result !== "object") {
             return [];
         }
-
-        /*
-         * Supports many possible backend formats:
-         *
-         * { applications: [] }
-         * { data: [] }
-         * { data: { applications: [] } }
-         * { results: [] }
-         * { records: [] }
-         */
 
         const direct =
             result[type];
@@ -624,10 +550,6 @@
         return [];
     }
 
-    /* =====================================================
-       AUTHENTICATED FETCH
-    ===================================================== */
-
     async function authenticatedFetch(
         url,
         options = {}
@@ -655,18 +577,7 @@
         );
     }
 
-    /* =====================================================
-       NAVIGATION
-    ===================================================== */
-
     function setupNavigation() {
-
-        /*
-         * Supports BOTH:
-         *
-         * data-section
-         * data-admin-section
-         */
 
         document
             .querySelectorAll(
@@ -719,9 +630,7 @@
         }
     }
 
-    function switchSection(
-        section
-    ) {
+    function switchSection(section) {
 
         currentSection =
             section;
@@ -741,10 +650,6 @@
                     linkSection === section
                 );
             });
-
-        /*
-         * Supports BOTH dashboard versions.
-         */
 
         document
             .querySelectorAll(
@@ -792,10 +697,6 @@
         });
     }
 
-    /* =====================================================
-       FILTERS
-    ===================================================== */
-
     function setupFilters() {
 
         document
@@ -809,10 +710,6 @@
                     renderCurrentSection
                 );
             });
-
-        /*
-         * Compatibility with existing dashboard IDs.
-         */
 
         [
             "#applicationStatusFilter",
@@ -899,10 +796,6 @@
         }
     }
 
-    /* =====================================================
-       OVERVIEW
-    ===================================================== */
-
     function renderOverview() {
 
         updateDashboardStats();
@@ -947,10 +840,6 @@
 
         attachRecordActions(container);
     }
-
-    /* =====================================================
-       STATISTICS
-    ===================================================== */
 
     function updateDashboardStats() {
 
@@ -1020,10 +909,6 @@
             ],
             upcoming
         );
-
-        /*
-         * Sidebar counts.
-         */
 
         updateSidebarCount(
             "applications",
@@ -1098,10 +983,6 @@
             });
     }
 
-    /* =====================================================
-       APPLICATIONS
-    ===================================================== */
-
     function renderApplications() {
 
         const container =
@@ -1150,9 +1031,7 @@
         );
     }
 
-    function createApplicationRow(
-        record
-    ) {
+    function createApplicationRow(record) {
 
         const id =
             getRecordId(record);
@@ -1184,47 +1063,22 @@
 
         return `
             <tr data-record-id="${escapeHTML(id)}">
-
                 <td>
-                    <strong>
-                        ${escapeHTML(name)}
-                    </strong>
-
+                    <strong>${escapeHTML(name)}</strong>
                     ${
                         record.email
-                            ? `
-                                <small class="table-subtext">
-                                    ${escapeHTML(record.email)}
-                                </small>
-                            `
+                            ? `<small class="table-subtext">${escapeHTML(record.email)}</small>`
                             : ""
                     }
                 </td>
-
-                <td>
-                    ${escapeHTML(competition)}
-                </td>
-
-                <td>
-                    ${escapeHTML(sport)}
-                </td>
-
-                <td>
-                    ${
-                        date
-                            ? formatDate(date)
-                            : "—"
-                    }
-                </td>
-
+                <td>${escapeHTML(competition)}</td>
+                <td>${escapeHTML(sport)}</td>
+                <td>${date ? formatDate(date) : "—"}</td>
                 <td>
                     <span class="status-badge ${getStatusClass(status)}">
-                        ${escapeHTML(
-                            formatStatus(status)
-                        )}
+                        ${escapeHTML(formatStatus(status))}
                     </span>
                 </td>
-
                 <td>
                     ${escapeHTML(
                         formatDateTime(
@@ -1233,38 +1087,24 @@
                         )
                     )}
                 </td>
-
                 <td class="table-actions">
-
-                    <button
-                        type="button"
-                        class="admin-action-btn view"
+                    <button type="button" class="admin-action-btn view"
                         data-action="view"
                         data-record-type="application"
-                        data-record-id="${escapeHTML(id)}"
-                    >
+                        data-record-id="${escapeHTML(id)}">
                         View
                     </button>
 
-                    <button
-                        type="button"
-                        class="admin-action-btn delete"
+                    <button type="button" class="admin-action-btn delete"
                         data-action="delete"
                         data-record-type="application"
-                        data-record-id="${escapeHTML(id)}"
-                    >
+                        data-record-id="${escapeHTML(id)}">
                         Delete
                     </button>
-
                 </td>
-
             </tr>
         `;
     }
-
-    /* =====================================================
-       PARTICIPANTS
-    ===================================================== */
 
     function renderParticipants() {
 
@@ -1314,9 +1154,7 @@
         );
     }
 
-    function createParticipantRow(
-        record
-    ) {
+    function createParticipantRow(record) {
 
         const id =
             getRecordId(record);
@@ -1348,29 +1186,11 @@
 
         return `
             <tr data-record-id="${escapeHTML(id)}">
-
-                <td>
-                    <strong>
-                        ${escapeHTML(name)}
-                    </strong>
-                </td>
-
-                <td>
-                    ${escapeHTML(event)}
-                </td>
-
-                <td>
-                    ${escapeHTML(sport)}
-                </td>
-
-                <td>
-                    ${escapeHTML(phone)}
-                </td>
-
-                <td>
-                    ${escapeHTML(email)}
-                </td>
-
+                <td><strong>${escapeHTML(name)}</strong></td>
+                <td>${escapeHTML(event)}</td>
+                <td>${escapeHTML(sport)}</td>
+                <td>${escapeHTML(phone)}</td>
+                <td>${escapeHTML(email)}</td>
                 <td>
                     ${escapeHTML(
                         formatDateTime(
@@ -1379,38 +1199,24 @@
                         )
                     )}
                 </td>
-
                 <td class="table-actions">
-
-                    <button
-                        type="button"
-                        class="admin-action-btn view"
+                    <button type="button" class="admin-action-btn view"
                         data-action="view"
                         data-record-type="participant"
-                        data-record-id="${escapeHTML(id)}"
-                    >
+                        data-record-id="${escapeHTML(id)}">
                         View
                     </button>
 
-                    <button
-                        type="button"
-                        class="admin-action-btn delete"
+                    <button type="button" class="admin-action-btn delete"
                         data-action="delete"
                         data-record-type="participant"
-                        data-record-id="${escapeHTML(id)}"
-                    >
+                        data-record-id="${escapeHTML(id)}">
                         Delete
                     </button>
-
                 </td>
-
             </tr>
         `;
     }
-
-    /* =====================================================
-       EVENTS
-    ===================================================== */
 
     function renderEvents() {
 
@@ -1460,9 +1266,7 @@
         );
     }
 
-    function createEventRow(
-        record
-    ) {
+    function createEventRow(record) {
 
         const id =
             getRecordId(record);
@@ -1502,72 +1306,34 @@
 
         return `
             <tr data-record-id="${escapeHTML(id)}">
-
-                <td>
-                    <strong>
-                        ${escapeHTML(name)}
-                    </strong>
-                </td>
-
-                <td>
-                    ${escapeHTML(sport)}
-                </td>
-
-                <td>
-                    ${
-                        date
-                            ? formatDate(date)
-                            : "—"
-                    }
-                </td>
-
-                <td>
-                    ${escapeHTML(location)}
-                </td>
-
-                <td>
-                    ${formatNumber(participantCount)}
-                </td>
-
+                <td><strong>${escapeHTML(name)}</strong></td>
+                <td>${escapeHTML(sport)}</td>
+                <td>${date ? formatDate(date) : "—"}</td>
+                <td>${escapeHTML(location)}</td>
+                <td>${formatNumber(participantCount)}</td>
                 <td>
                     <span class="status-badge ${getStatusClass(status)}">
-                        ${escapeHTML(
-                            formatStatus(status)
-                        )}
+                        ${escapeHTML(formatStatus(status))}
                     </span>
                 </td>
-
                 <td class="table-actions">
-
-                    <button
-                        type="button"
-                        class="admin-action-btn view"
+                    <button type="button" class="admin-action-btn view"
                         data-action="view"
                         data-record-type="event"
-                        data-record-id="${escapeHTML(id)}"
-                    >
+                        data-record-id="${escapeHTML(id)}">
                         View
                     </button>
 
-                    <button
-                        type="button"
-                        class="admin-action-btn delete"
+                    <button type="button" class="admin-action-btn delete"
                         data-action="delete"
                         data-record-type="event"
-                        data-record-id="${escapeHTML(id)}"
-                    >
+                        data-record-id="${escapeHTML(id)}">
                         Delete
                     </button>
-
                 </td>
-
             </tr>
         `;
     }
-
-    /* =====================================================
-       CONTACTS
-    ===================================================== */
 
     function renderContacts() {
 
@@ -1617,9 +1383,7 @@
         );
     }
 
-    function createContactRow(
-        record
-    ) {
+    function createContactRow(record) {
 
         const id =
             getRecordId(record);
@@ -1645,29 +1409,14 @@
 
         return `
             <tr data-record-id="${escapeHTML(id)}">
-
-                <td>
-                    <strong>
-                        ${escapeHTML(name)}
-                    </strong>
-                </td>
-
-                <td>
-                    ${escapeHTML(email)}
-                </td>
-
-                <td>
-                    ${escapeHTML(subject)}
-                </td>
-
+                <td><strong>${escapeHTML(name)}</strong></td>
+                <td>${escapeHTML(email)}</td>
+                <td>${escapeHTML(subject)}</td>
                 <td>
                     <span class="status-badge ${getStatusClass(status)}">
-                        ${escapeHTML(
-                            formatStatus(status)
-                        )}
+                        ${escapeHTML(formatStatus(status))}
                     </span>
                 </td>
-
                 <td>
                     ${escapeHTML(
                         formatDateTime(
@@ -1676,46 +1425,28 @@
                         )
                     )}
                 </td>
-
                 <td class="table-actions">
-
-                    <button
-                        type="button"
-                        class="admin-action-btn view"
+                    <button type="button" class="admin-action-btn view"
                         data-action="view"
                         data-record-type="contact"
-                        data-record-id="${escapeHTML(id)}"
-                    >
+                        data-record-id="${escapeHTML(id)}">
                         View
                     </button>
 
-                    <button
-                        type="button"
-                        class="admin-action-btn delete"
+                    <button type="button" class="admin-action-btn delete"
                         data-action="delete"
                         data-record-type="contact"
-                        data-record-id="${escapeHTML(id)}"
-                    >
+                        data-record-id="${escapeHTML(id)}">
                         Delete
                     </button>
-
                 </td>
-
             </tr>
         `;
     }
 
-    /* =====================================================
-       FILTER RECORDS
-    ===================================================== */
+    function filterRecords(records, type) {
 
-    function filterRecords(
-        records,
-        type
-    ) {
-
-        let result =
-            [...records];
+        let result = [...records];
 
         const search =
             getSearchValue(type);
@@ -1734,7 +1465,6 @@
                     const text =
                         Object.values(record)
                             .filter(function (value) {
-
                                 return (
                                     typeof value === "string" ||
                                     typeof value === "number"
@@ -1808,9 +1538,7 @@
         return result;
     }
 
-    function getSearchValue(
-        type
-    ) {
+    function getSearchValue(type) {
 
         const ids = {
             applications: "#applicationSearch",
@@ -1820,21 +1548,15 @@
         };
 
         const input =
-            document.querySelector(
-                ids[type]
-            ) ||
-            document.querySelector(
-                "[data-admin-search]"
-            );
+            document.querySelector(ids[type]) ||
+            document.querySelector("[data-admin-search]");
 
         return input
             ? input.value.trim().toLowerCase()
             : "";
     }
 
-    function getStatusFilter(
-        type
-    ) {
+    function getStatusFilter(type) {
 
         const ids = {
             applications: "#applicationStatusFilter",
@@ -1844,9 +1566,7 @@
         };
 
         const element =
-            document.querySelector(
-                ids[type]
-            );
+            document.querySelector(ids[type]);
 
         if (element) {
             return element.value;
@@ -1865,9 +1585,7 @@
     function getSportFilter() {
 
         const element =
-            document.querySelector(
-                "#eventSportFilter"
-            ) ||
+            document.querySelector("#eventSportFilter") ||
             document.querySelector(
                 '[data-admin-filter="sport"]'
             );
@@ -1877,18 +1595,10 @@
             : "";
     }
 
-    /* =====================================================
-       ACTIONS
-    ===================================================== */
-
-    function attachRecordActions(
-        container
-    ) {
+    function attachRecordActions(container) {
 
         container
-            .querySelectorAll(
-                "[data-action]"
-            )
+            .querySelectorAll("[data-action]")
             .forEach(function (button) {
 
                 button.addEventListener(
@@ -1916,14 +1626,7 @@
             });
     }
 
-    /* =====================================================
-       VIEW RECORD
-    ===================================================== */
-
-    function viewRecord(
-        type,
-        id
-    ) {
+    function viewRecord(type, id) {
 
         const record =
             findRecord(type, id);
@@ -1946,10 +1649,7 @@
         );
     }
 
-    function findRecord(
-        type,
-        id
-    ) {
+    function findRecord(type, id) {
 
         const map = {
             application: applications,
@@ -1969,14 +1669,7 @@
         });
     }
 
-    /* =====================================================
-       DETAILS MODAL
-    ===================================================== */
-
-    function createRecordDetails(
-        type,
-        record
-    ) {
+    function createRecordDetails(type, record) {
 
         const title =
             getRecordTitle(
@@ -1987,14 +1680,12 @@
         const rows =
             Object.entries(record)
                 .filter(function ([key]) {
-
                     return (
                         key !== "raw" &&
                         key !== "__v"
                     );
                 })
                 .map(function ([key, value]) {
-
                     return createDetailRow(
                         key,
                         value
@@ -2004,9 +1695,7 @@
 
         return `
             <div class="admin-detail-modal">
-
                 <div class="admin-detail-header">
-
                     <span class="admin-detail-type">
                         ${escapeHTML(
                             formatRecordType(type)
@@ -2016,24 +1705,18 @@
                     <h2>
                         ${escapeHTML(title)}
                     </h2>
-
                 </div>
 
                 <div class="admin-detail-list">
                     ${rows}
                 </div>
-
             </div>
         `;
     }
 
-    function createDetailRow(
-        key,
-        value
-    ) {
+    function createDetailRow(key, value) {
 
-        let displayValue =
-            value;
+        let displayValue = value;
 
         if (
             value === null ||
@@ -2065,7 +1748,6 @@
 
         return `
             <div class="admin-detail-row">
-
                 <strong>
                     ${escapeHTML(
                         humanizeKey(key)
@@ -2077,15 +1759,11 @@
                         String(displayValue)
                     )}
                 </span>
-
             </div>
         `;
     }
 
-    function getRecordTitle(
-        type,
-        record
-    ) {
+    function getRecordTitle(type, record) {
 
         return (
             record.name ||
@@ -2098,9 +1776,7 @@
         );
     }
 
-    function formatRecordType(
-        type
-    ) {
+    function formatRecordType(type) {
 
         const map = {
             application: "Event Application",
@@ -2115,14 +1791,7 @@
         );
     }
 
-    /* =====================================================
-       DELETE
-    ===================================================== */
-
-    async function deleteRecord(
-        type,
-        id
-    ) {
+    async function deleteRecord(type, id) {
 
         const record =
             findRecord(
@@ -2211,9 +1880,7 @@
         }
     }
 
-    function getEndpointForType(
-        type
-    ) {
+    function getEndpointForType(type) {
 
         const map = {
             application: API.applications,
@@ -2225,10 +1892,7 @@
         return map[type];
     }
 
-    function removeLocalRecord(
-        type,
-        id
-    ) {
+    function removeLocalRecord(type, id) {
 
         const filter =
             function (record) {
@@ -2260,10 +1924,6 @@
                 contacts.filter(filter);
         }
     }
-
-    /* =====================================================
-       MODAL
-    ===================================================== */
 
     function setupModal() {
 
@@ -2302,9 +1962,7 @@
         }
     }
 
-    function openModal(
-        content
-    ) {
+    function openModal(content) {
 
         const modal =
             document.querySelector(
@@ -2371,10 +2029,6 @@
         }
     );
 
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
-
     function setupLogout() {
 
         document
@@ -2390,9 +2044,7 @@
             });
     }
 
-    function handleLogout(
-        event
-    ) {
+    function handleLogout(event) {
 
         if (event) {
             event.preventDefault();
@@ -2413,10 +2065,6 @@
             "admin-login.html";
     }
 
-    /* =====================================================
-       UNAUTHORIZED
-    ===================================================== */
-
     function handleUnauthorized() {
 
         removeToken();
@@ -2425,17 +2073,7 @@
             "admin-login.html?expired=true";
     }
 
-    /* =====================================================
-       LOADING FIX
-    ===================================================== */
-
-    function setLoading(
-        loading
-    ) {
-
-        /*
-         * Hide/show every dashboard loading element.
-         */
+    function setLoading(loading) {
 
         document
             .querySelectorAll(
@@ -2453,10 +2091,6 @@
                         ? ""
                         : "none";
             });
-
-        /*
-         * Also support common loading IDs/classes.
-         */
 
         document
             .querySelectorAll(
@@ -2483,10 +2117,6 @@
         setLoading(false);
     }
 
-    /* =====================================================
-       ERROR HANDLING
-    ===================================================== */
-
     function hideDashboardErrors() {
 
         document
@@ -2503,9 +2133,7 @@
             });
     }
 
-    function showDashboardError(
-        message
-    ) {
+    function showDashboardError(message) {
 
         document
             .querySelectorAll(
@@ -2527,9 +2155,7 @@
         );
     }
 
-    function showPartialErrors(
-        results
-    ) {
+    function showPartialErrors(results) {
 
         const names = [
             "Applications",
@@ -2538,8 +2164,7 @@
             "Contacts"
         ];
 
-        const failed =
-            [];
+        const failed = [];
 
         results.forEach(
             function (result, index) {
@@ -2570,55 +2195,31 @@
         }
     }
 
-    /* =====================================================
-       EMPTY STATES
-    ===================================================== */
-
-    function createEmptyHTML(
-        message
-    ) {
+    function createEmptyHTML(message) {
 
         return `
             <div class="admin-empty">
-
-                <div class="admin-empty-icon">
-                    —
-                </div>
-
-                <h3>
-                    ${escapeHTML(message)}
-                </h3>
-
+                <div class="admin-empty-icon">—</div>
+                <h3>${escapeHTML(message)}</h3>
             </div>
         `;
     }
 
-    function createEmptyTableRow(
-        message
-    ) {
+    function createEmptyTableRow(message) {
 
         return `
             <tr>
-
                 <td
                     colspan="10"
                     class="admin-empty-cell"
                 >
                     ${escapeHTML(message)}
                 </td>
-
             </tr>
         `;
     }
 
-    /* =====================================================
-       GLOBAL MESSAGE
-    ===================================================== */
-
-    function showGlobalMessage(
-        message,
-        type
-    ) {
+    function showGlobalMessage(message, type) {
 
         let element =
             document.querySelector(
@@ -2660,10 +2261,6 @@
 
         }, 4500);
     }
-
-    /* =====================================================
-       LOGIN MESSAGE
-    ===================================================== */
 
     function showAdminMessage(
         form,
@@ -2707,9 +2304,7 @@
         );
     }
 
-    function clearAdminMessage(
-        form
-    ) {
+    function clearAdminMessage(form) {
 
         const element =
             form.querySelector(
@@ -2727,10 +2322,6 @@
                 "admin-message";
         }
     }
-
-    /* =====================================================
-       SECTION COUNTS
-    ===================================================== */
 
     function updateSectionCount(
         section,
@@ -2773,13 +2364,7 @@
         });
     }
 
-    /* =====================================================
-       NORMALIZE RECORD
-    ===================================================== */
-
-    function normalizeRecord(
-        record
-    ) {
+    function normalizeRecord(record) {
 
         if (
             !record ||
@@ -2802,9 +2387,7 @@
         };
     }
 
-    function getRecordId(
-        record
-    ) {
+    function getRecordId(record) {
 
         return String(
             record?.id ||
@@ -2817,14 +2400,7 @@
         );
     }
 
-    /* =====================================================
-       STATUS
-    ===================================================== */
-
-    function normalizeStatus(
-        status,
-        date
-    ) {
+    function normalizeStatus(status, date) {
 
         const value =
             String(status || "")
@@ -2915,9 +2491,7 @@
         return "new";
     }
 
-    function isPending(
-        status
-    ) {
+    function isPending(status) {
 
         return (
             normalizeStatus(status) ===
@@ -2925,9 +2499,7 @@
         );
     }
 
-    function formatStatus(
-        status
-    ) {
+    function formatStatus(status) {
 
         const map = {
             pending: "Pending",
@@ -2946,9 +2518,7 @@
         );
     }
 
-    function getStatusClass(
-        status
-    ) {
+    function getStatusClass(status) {
 
         return (
             `status-${String(
@@ -2957,13 +2527,7 @@
         );
     }
 
-    /* =====================================================
-       DATE HELPERS
-    ===================================================== */
-
-    function formatDate(
-        value
-    ) {
+    function formatDate(value) {
 
         if (!value) {
             return "—";
@@ -2990,9 +2554,7 @@
         ).format(date);
     }
 
-    function formatDateTime(
-        value
-    ) {
+    function formatDateTime(value) {
 
         if (!value) {
             return "—";
@@ -3021,9 +2583,7 @@
         ).format(date);
     }
 
-    function getTimestamp(
-        record
-    ) {
+    function getTimestamp(record) {
 
         const value =
             typeof record === "object"
@@ -3045,9 +2605,7 @@
             : timestamp;
     }
 
-    function formatNumber(
-        value
-    ) {
+    function formatNumber(value) {
 
         const number =
             Number(value);
@@ -3061,13 +2619,7 @@
         ).format(number);
     }
 
-    /* =====================================================
-       STRING HELPERS
-    ===================================================== */
-
-    function humanizeKey(
-        key
-    ) {
+    function humanizeKey(key) {
 
         return String(key)
             .replace(
@@ -3091,9 +2643,7 @@
             );
     }
 
-    function capitalize(
-        value
-    ) {
+    function capitalize(value) {
 
         if (!value) {
             return "";
@@ -3105,13 +2655,7 @@
         );
     }
 
-    /* =====================================================
-       BUTTON HELPERS
-    ===================================================== */
-
-    function getButtonText(
-        button
-    ) {
+    function getButtonText(button) {
 
         if (!button) {
             return "";
@@ -3178,26 +2722,14 @@
         }
     }
 
-    /* =====================================================
-       EMAIL
-    ===================================================== */
-
-    function isValidEmail(
-        email
-    ) {
+    function isValidEmail(email) {
 
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
             email
         );
     }
 
-    /* =====================================================
-       RESPONSE PARSER
-    ===================================================== */
-
-    async function parseResponse(
-        response
-    ) {
+    async function parseResponse(response) {
 
         const contentType =
             response.headers.get(
@@ -3225,13 +2757,7 @@
         };
     }
 
-    /* =====================================================
-       ERROR MESSAGE
-    ===================================================== */
-
-    function getErrorMessage(
-        error
-    ) {
+    function getErrorMessage(error) {
 
         if (
             error?.message &&
@@ -3246,7 +2772,7 @@
         ) {
 
             return (
-                "Unable to connect to the SPORTING server. Make sure the backend is running on port 5000."
+                "Unable to connect to the SPORTING Render server. Please check the deployed backend."
             );
         }
 
@@ -3256,13 +2782,7 @@
         );
     }
 
-    /* =====================================================
-       HTML ESCAPE
-    ===================================================== */
-
-    function escapeHTML(
-        value
-    ) {
+    function escapeHTML(value) {
 
         return String(value ?? "")
             .replace(
@@ -3287,14 +2807,7 @@
             );
     }
 
-    /* =====================================================
-       DEBOUNCE
-    ===================================================== */
-
-    function debounce(
-        callback,
-        delay
-    ) {
+    function debounce(callback, delay) {
 
         let timeout;
 
@@ -3322,10 +2835,6 @@
                 );
         };
     }
-
-    /* =====================================================
-       PUBLIC API
-    ===================================================== */
 
     window.SPORTING_ADMIN = {
 
